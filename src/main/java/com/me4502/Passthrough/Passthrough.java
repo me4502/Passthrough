@@ -10,12 +10,26 @@ import java.util.zip.ZipEntry;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.me4502.Passthrough.config.PassthroughConfiguration;
+
 public class Passthrough extends JavaPlugin {
+
+    PassthroughConfiguration config;
 
     @Override
     public void onEnable() {
 
         createDefaultConfiguration(new File(getDataFolder(), "config.yml"), "config.yml");
+        config = new PassthroughConfiguration();
+        config.load();
+
+        getServer().getPluginManager().registerEvents(new PassthroughListener(this), this);
+    }
+
+    @Override
+    public void onDisable() {
+
+        config.save();
     }
 
     /**
@@ -23,19 +37,16 @@ public class Passthrough extends JavaPlugin {
      *
      * @param actual      The destination file
      * @param defaultName The name of the file inside the jar's defaults folder
-     * @param force       If it should make the file even if it already exists
      */
     public void createDefaultConfiguration(File actual, String defaultName) {
 
         // Make parent directories
         File parent = actual.getParentFile();
-        if (!parent.exists()) {
+        if (!parent.exists())
             parent.mkdirs();
-        }
 
-        if (actual.exists()) {
+        if (actual.exists())
             return;
-        }
 
         InputStream input = null;
         JarFile file = null;
@@ -66,28 +77,16 @@ public class Passthrough extends JavaPlugin {
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
-
                 try {
                     file.close();
-                } catch (IOException ignored) {
-                }
-
-                try {
                     input.close();
-                } catch (IOException ignore) {
-                }
-
-                try {
-                    if (output != null) {
+                    if(output != null)
                         output.close();
-                    }
-                } catch (IOException ignore) {
-                }
+                } catch (IOException ignored) {}
             }
         } else if (file != null)
             try {
                 file.close();
-            } catch (IOException ignored) {
-            }
+            } catch (IOException ignored) {}
     }
 }
