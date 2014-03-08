@@ -32,7 +32,7 @@ public class PassthroughListener implements Listener {
 
             double y = 0;
             if(plugin.config.getWorldEntryByWorld(entry.getAbove()) != null)
-                y = plugin.config.getWorldEntryByWorld(entry.getAbove()).getDepth()+1;
+                y = plugin.config.getWorldEntryByWorld(entry.getAbove()).getDepth()+1+(event.getTo().getY()-entry.getHeight());
 
             double blockModifier = plugin.config.getWorldPropertiesByWorld(entry.getAbove()).getBlockModifier() / plugin.config.getWorldPropertiesByWorld(entry.getName()).getBlockModifier();
 
@@ -43,7 +43,7 @@ public class PassthroughListener implements Listener {
 
             double y = 255;
             if(plugin.config.getWorldEntryByWorld(entry.getBeneath()) != null)
-                y = plugin.config.getWorldEntryByWorld(entry.getBeneath()).getHeight()-2;
+                y = plugin.config.getWorldEntryByWorld(entry.getBeneath()).getHeight()-2-(entry.getDepth()-event.getTo().getY());
 
             double blockModifier = plugin.config.getWorldPropertiesByWorld(entry.getBeneath()).getBlockModifier() / plugin.config.getWorldPropertiesByWorld(entry.getName()).getBlockModifier();
 
