@@ -4,7 +4,7 @@ public class WorldProperties {
 
     private String name;
 
-    private int blockModifier;
+    private double blockModifier;
 
     public WorldProperties(String worldName) {
 
@@ -16,12 +16,12 @@ public class WorldProperties {
         return name;
     }
 
-    public void setBlockModifier(int blockModifier) {
+    public void setBlockModifier(double blockModifier) {
 
         this.blockModifier = blockModifier;
     }
 
-    public int getBlockModifier() {
+    public double getBlockModifier() {
 
         return blockModifier;
     }

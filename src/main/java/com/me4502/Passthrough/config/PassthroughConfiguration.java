@@ -73,7 +73,7 @@ public class PassthroughConfiguration {
 
                 WorldProperties entry = new WorldProperties(key);
 
-                entry.setBlockModifier(worldProperty.getInt("block-modifier", 1));
+                entry.setBlockModifier(worldProperty.getDouble("block-modifier", 1));
 
                 worldProperties.add(entry);
             }
