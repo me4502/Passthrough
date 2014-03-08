@@ -34,7 +34,9 @@ public class PassthroughListener implements Listener {
             if(plugin.config.getWorldEntryByWorld(entry.getAbove()) != null)
                 y = plugin.config.getWorldEntryByWorld(entry.getAbove()).getDepth()+1;
 
-            event.getPlayer().teleport(new Location(Bukkit.getWorld(entry.getAbove()), event.getTo().getX(), y, event.getTo().getZ(), event.getTo().getYaw(), event.getTo().getPitch()));
+            double blockModifier = plugin.config.getWorldPropertiesByWorld(entry.getAbove()).getBlockModifier() / plugin.config.getWorldPropertiesByWorld(entry.getName()).getBlockModifier();
+
+            event.getPlayer().teleport(new Location(Bukkit.getWorld(entry.getAbove()), event.getTo().getX() * blockModifier, y, event.getTo().getZ() * blockModifier, event.getTo().getYaw(), event.getTo().getPitch()));
         } else if(event.getTo().getY() < entry.getDepth()) {
 
             if(entry.getBeneath() == null) return;
@@ -43,7 +45,9 @@ public class PassthroughListener implements Listener {
             if(plugin.config.getWorldEntryByWorld(entry.getBeneath()) != null)
                 y = plugin.config.getWorldEntryByWorld(entry.getBeneath()).getHeight()-2;
 
-            event.getPlayer().teleport(new Location(Bukkit.getWorld(entry.getBeneath()), event.getTo().getX(), y, event.getTo().getZ(), event.getTo().getYaw(), event.getTo().getPitch()));
+            double blockModifier = plugin.config.getWorldPropertiesByWorld(entry.getBeneath()).getBlockModifier() / plugin.config.getWorldPropertiesByWorld(entry.getName()).getBlockModifier();
+
+            event.getPlayer().teleport(new Location(Bukkit.getWorld(entry.getBeneath()), event.getTo().getX() * blockModifier, y, event.getTo().getZ() * blockModifier, event.getTo().getYaw(), event.getTo().getPitch()));
         }
     }
 }

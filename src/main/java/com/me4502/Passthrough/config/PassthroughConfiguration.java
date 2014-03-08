@@ -15,6 +15,7 @@ import com.me4502.Passthrough.Passthrough;
 public class PassthroughConfiguration {
 
     public Set<WorldEntry> worldEntries;
+    public Set<WorldProperties> worldProperties;
 
     Passthrough plugin;
 
@@ -29,6 +30,7 @@ public class PassthroughConfiguration {
 
         config = new YamlConfiguration();
         worldEntries = new HashSet<WorldEntry>();
+        worldProperties = new HashSet<WorldProperties>();
         try {
             config.load(new File(plugin.getDataFolder(), "config.yml"));
 
@@ -55,6 +57,27 @@ public class PassthroughConfiguration {
                 worldEntries.add(entry);
             }
 
+            ConfigurationSection worldPropertiesConfig = config.getConfigurationSection("world-properties");
+            if(worldPropertiesConfig == null) {
+                worldPropertiesConfig = config.createSection("world-properties");
+            }
+
+            for(World world : Bukkit.getWorlds()) {
+                if(worldPropertiesConfig.getConfigurationSection(world.getName()) == null)
+                    worldPropertiesConfig.createSection(world.getName());
+            }
+
+            for(String key : worldPropertiesConfig.getKeys(false)) {
+
+                ConfigurationSection worldProperty = worldPropertiesConfig.getConfigurationSection(key);
+
+                WorldProperties entry = new WorldProperties(key);
+
+                entry.setBlockModifier(worldProperty.getInt("block-modifier", 1));
+
+                worldProperties.add(entry);
+            }
+
             config.save(new File(plugin.getDataFolder(), "config.yml"));
         } catch(Exception e) {
             e.printStackTrace();
@@ -70,6 +93,21 @@ public class PassthroughConfiguration {
         WorldEntry ent = null;
 
         for(WorldEntry entry : worldEntries) {
+
+            if(entry.getName().equals(worldName)) {
+                ent = entry;
+                break;
+            }
+        }
+
+        return ent;
+    }
+
+    public WorldProperties getWorldPropertiesByWorld(String worldName) {
+
+        WorldProperties ent = null;
+
+        for(WorldProperties entry : worldProperties) {
 
             if(entry.getName().equals(worldName)) {
                 ent = entry;

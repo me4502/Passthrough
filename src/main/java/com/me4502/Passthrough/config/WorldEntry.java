@@ -57,4 +57,10 @@ public class WorldEntry {
 
         return depth;
     }
+
+    @Override
+    public int hashCode() {
+
+        return name.hashCode();
+    }
 }
