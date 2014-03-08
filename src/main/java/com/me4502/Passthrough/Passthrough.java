@@ -20,7 +20,7 @@ public class Passthrough extends JavaPlugin {
     public void onEnable() {
 
         createDefaultConfiguration(new File(getDataFolder(), "config.yml"), "config.yml");
-        config = new PassthroughConfiguration();
+        config = new PassthroughConfiguration(this);
         config.load();
 
         getServer().getPluginManager().registerEvents(new PassthroughListener(this), this);
