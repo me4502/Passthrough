@@ -30,12 +30,20 @@ public class PassthroughListener implements Listener {
 
                 if(entry.getAbove() == null) return;
 
-                event.getPlayer().teleport(new Location(Bukkit.getWorld(entry.getAbove()), event.getTo().getX(), 0, event.getTo().getZ(), event.getTo().getYaw(), event.getTo().getPitch()));
+                double y = 0;
+                if(plugin.config.getWorldEntryByWorld(entry.getAbove()) != null)
+                    y = plugin.config.getWorldEntryByWorld(entry.getAbove()).getDepth()+1;
+
+                event.getPlayer().teleport(new Location(Bukkit.getWorld(entry.getAbove()), event.getTo().getX(), y, event.getTo().getZ(), event.getTo().getYaw(), event.getTo().getPitch()));
             } else if(event.getTo().getY() < entry.getDepth()) {
 
                 if(entry.getBeneath() == null) return;
 
-                event.getPlayer().teleport(new Location(Bukkit.getWorld(entry.getBeneath()), event.getTo().getX(), 256, event.getTo().getZ(), event.getTo().getYaw(), event.getTo().getPitch()));
+                double y = 255;
+                if(plugin.config.getWorldEntryByWorld(entry.getAbove()) != null)
+                    y = plugin.config.getWorldEntryByWorld(entry.getAbove()).getHeight()-1;
+
+                event.getPlayer().teleport(new Location(Bukkit.getWorld(entry.getBeneath()), event.getTo().getX(), y, event.getTo().getZ(), event.getTo().getYaw(), event.getTo().getPitch()));
             }
         }
     }

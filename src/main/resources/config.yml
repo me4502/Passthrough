@@ -1,0 +1,4 @@
+world-links:
+  world:
+    above: world_the_end
+    below: world_nether

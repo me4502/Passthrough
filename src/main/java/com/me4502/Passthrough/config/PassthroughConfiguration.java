@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -31,12 +33,20 @@ public class PassthroughConfiguration {
             config.load(new File(plugin.getDataFolder(), "config.yml"));
 
             ConfigurationSection worldLinks = config.getConfigurationSection("world-links");
+            if(worldLinks == null) {
+                worldLinks = config.createSection("world-links");
+            }
+
+            for(World world : Bukkit.getWorlds()) {
+                if(worldLinks.getConfigurationSection(world.getName()) == null)
+                    worldLinks.createSection(world.getName());
+            }
 
             for(String key : worldLinks.getKeys(false)) {
 
                 ConfigurationSection worldLink = worldLinks.getConfigurationSection(key);
 
-                WorldEntry entry = new WorldEntry(worldLink.getString("world-name"));
+                WorldEntry entry = new WorldEntry(key);
                 entry.setAbove(worldLink.getString("above-world"));
                 entry.setBeneath(worldLink.getString("below-world"));
                 entry.setDepth(worldLink.getDouble("world-minimum-height", 0));
@@ -44,6 +54,8 @@ public class PassthroughConfiguration {
 
                 worldEntries.add(entry);
             }
+
+            config.save(new File(plugin.getDataFolder(), "config.yml"));
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -51,5 +63,20 @@ public class PassthroughConfiguration {
 
     public void save() {
 
+    }
+
+    public WorldEntry getWorldEntryByWorld(String worldName) {
+
+        WorldEntry ent = null;
+
+        for(WorldEntry entry : worldEntries) {
+
+            if(entry.getName().equals(worldName)) {
+                ent = entry;
+                break;
+            }
+        }
+
+        return ent;
     }
 }
