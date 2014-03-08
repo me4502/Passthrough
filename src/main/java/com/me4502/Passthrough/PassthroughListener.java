@@ -22,29 +22,28 @@ public class PassthroughListener implements Listener {
 
         if(event.getFrom().getBlockY() == event.getTo().getBlockY()) return; //We want to be as performance conscious as possible.
 
-        for(WorldEntry entry : plugin.config.worldEntries) {
+        WorldEntry entry = plugin.config.getWorldEntryByWorld(event.getTo().getWorld().getName());
 
-            if(!entry.getName().equals(event.getPlayer().getLocation().getWorld().getName())) continue; //Wrong world.
+        if(entry == null) return;
 
-            if(event.getTo().getY() > entry.getHeight()) {
+        if(event.getTo().getY() > entry.getHeight()) {
 
-                if(entry.getAbove() == null) return;
+            if(entry.getAbove() == null) return;
 
-                double y = 0;
-                if(plugin.config.getWorldEntryByWorld(entry.getAbove()) != null)
-                    y = plugin.config.getWorldEntryByWorld(entry.getAbove()).getDepth()+1;
+            double y = 0;
+            if(plugin.config.getWorldEntryByWorld(entry.getAbove()) != null)
+                y = plugin.config.getWorldEntryByWorld(entry.getAbove()).getDepth()+1;
 
-                event.getPlayer().teleport(new Location(Bukkit.getWorld(entry.getAbove()), event.getTo().getX(), y, event.getTo().getZ(), event.getTo().getYaw(), event.getTo().getPitch()));
-            } else if(event.getTo().getY() < entry.getDepth()) {
+            event.getPlayer().teleport(new Location(Bukkit.getWorld(entry.getAbove()), event.getTo().getX(), y, event.getTo().getZ(), event.getTo().getYaw(), event.getTo().getPitch()));
+        } else if(event.getTo().getY() < entry.getDepth()) {
 
-                if(entry.getBeneath() == null) return;
+            if(entry.getBeneath() == null) return;
 
-                double y = 255;
-                if(plugin.config.getWorldEntryByWorld(entry.getAbove()) != null)
-                    y = plugin.config.getWorldEntryByWorld(entry.getAbove()).getHeight()-1;
+            double y = 255;
+            if(plugin.config.getWorldEntryByWorld(entry.getBeneath()) != null)
+                y = plugin.config.getWorldEntryByWorld(entry.getBeneath()).getHeight()-2;
 
-                event.getPlayer().teleport(new Location(Bukkit.getWorld(entry.getBeneath()), event.getTo().getX(), y, event.getTo().getZ(), event.getTo().getYaw(), event.getTo().getPitch()));
-            }
+            event.getPlayer().teleport(new Location(Bukkit.getWorld(entry.getBeneath()), event.getTo().getX(), y, event.getTo().getZ(), event.getTo().getYaw(), event.getTo().getPitch()));
         }
     }
 }
