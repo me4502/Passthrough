@@ -1,6 +1,7 @@
 package com.me4502.Passthrough.config;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -25,6 +26,7 @@ public class PassthroughConfiguration {
     public void load() {
 
         config = new YamlConfiguration();
+        worldEntries = new HashSet<WorldEntry>();
         try {
             config.load(new File(plugin.getDataFolder(), "config.yml"));
 
