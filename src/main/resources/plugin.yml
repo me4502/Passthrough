@@ -2,3 +2,4 @@ name: Passthrough
 main: com.me4502.Passthrough.Passthrough
 version: "${project.version}"
 author: Me4502
+load: POSTWORLD
